@@ -1,3 +1,0 @@
-"0","# Load data"
-"0","gene_path = paste(here::here(), ""/raw-data/2024-03-04-WIF-tis4d.xlsx"", sep = """")"
-"0","gene_fl <- read_excel(gene_path, sheet = 1, na = ""NA"")"
