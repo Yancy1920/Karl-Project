@@ -1,0 +1,2 @@
+"0","# qqplot"
+"0","qqnorm(residuals(gene_lmm2))"

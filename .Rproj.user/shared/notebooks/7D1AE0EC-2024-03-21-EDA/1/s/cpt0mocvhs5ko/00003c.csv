@@ -1,0 +1,2 @@
+"0","# save table"
+"0","write.csv(gene_EDA, here::here(""tabs/EDA.csv""), row.names = FALSE)"

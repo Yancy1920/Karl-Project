@@ -1,0 +1,4 @@
+"0",""
+"0","# Linear mixed-effect model"
+"0","# Residual vs fitted"
+"0","plot(gene_lmm2, xlab=""Fitted values"", ylab = ""Residuals"", main=""Residual vs Fitted"")"

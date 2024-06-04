@@ -1,0 +1,5 @@
+"0",""
+"0","# save"
+"0","ggsave(filename = here::here(""figs/EDA_box_name.png""),"
+"0","       plot = gene_box_name,"
+"0","       width = 8, height = 6)"

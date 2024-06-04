@@ -1,0 +1,5 @@
+"0",""
+"0","# save table"
+"0",""
+"0","write.csv(comparison, here::here(""tabs/model_aicbic.csv""), row.names = FALSE)"
+"0",""

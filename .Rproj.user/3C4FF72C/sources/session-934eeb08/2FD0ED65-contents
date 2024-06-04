@@ -1,0 +1,187 @@
+---
+title: "2024-03-21-EDA"
+author: "Yingxin Xu"
+date: "2024-03-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load packages
+```{r}
+pacman::p_load(tidyverse, targets, readxl,regclass,harrypotter,dplyr)
+```
+
+# Load data
+```{r}
+gene_path = paste(here::here(), "/raw-data/2024-03-04-WIF-tis4d.xlsx", sep = "")
+gene_fl <- read_excel(gene_path, sheet = 1, na = "NA")
+glimpse(gene_fl)
+```
+
+# Clean data
+```{r}
+# Standardize some column names and variable names
+gene_fl <-
+  gene_fl |>
+  mutate(
+    treatment = case_when(
+      treatment == "placebo" ~ "Placebo",
+      treatment == "activating factor 42" ~ "Activating factor 42",
+      TRUE ~ treatment
+    )
+  )
+gene_fl <-
+  gene_fl |>
+  mutate(
+    cell_line= case_when(
+      cell_line == "CELL-TYPE 101" ~ "Cell-type 101",
+      cell_line == "WILD-TYPE" ~ "Wild-type",
+      TRUE ~ cell_line
+    )
+  )
+
+gene_fl <-
+  gene_fl |>
+  mutate(
+    name = case_when(
+      name == "GL-cDZ" ~ "GL-CDZ",
+      name == "Gl-Cwn" ~ "GL-CWN",
+      name == "GL-cwN" ~ "GL-CWN",
+      name == "GL-kYH" ~ "GL-KYH",
+      name == "Gl-Rjs" ~ "GL-RJS",
+      name == "GL-rjS" ~ "GL-RJS",
+      name == "Gl-Xib" ~ "GL-XIB",
+      name == "GL-XIb" ~ "GL-XIB",
+      name == "GL-Xik" ~ "GL-XIK",
+      name == "Gl-Zhw" ~ "GL-ZHW",
+      name == "GL-ZHw" ~ "GL-ZHW",
+      TRUE ~ name
+    )
+  )
+
+colnames(gene_fl)[2] <- "Treatment"
+# delete NA terms
+gene_fl <- na.omit(gene_fl)
+```
+
+# EDA
+
+```{r}
+# look at the whole dataset
+gene_EDA <- skimr::skim_without_charts(gene_fl)
+gene_EDA
+# save table
+write.csv(gene_EDA, here::here("tabs/EDA.csv"), row.names = FALSE)
+```
+
+```{r}
+# look at response variable (histogram)
+gene_exp_hist <- gene_fl |>
+  ggplot(aes(gene_expression)) +
+  geom_histogram(col = "black", fill = "orange") +
+  labs(title = "Gene expression histogram")  # It is unimodel right-skewed.
+gene_exp_hist
+# save
+ggsave(filename = here::here("figs/EDA_gene expression_hist.png"),
+       plot = gene_exp_hist,
+       width = 8, height = 6)
+```
+
+```{r}
+# boxplots
+# cell line type
+gene_box_cellline <- gene_fl |>
+  ggplot(aes(x = cell_line, y = gene_expression, fill = cell_line)) +
+  theme_classic()+
+  geom_boxplot() +
+  labs(x = "Cell line",
+       y = "Gene expression",
+       title = "Cell line boxplot"
+  ) +
+  harrypotter::scale_fill_hp("Ravenclaw", discrete = TRUE)
+gene_box_cellline
+
+# save
+ggsave(filename = here::here("figs/EDA_box_cellline.png"),
+       plot = gene_box_cellline,
+       width = 8, height = 6)
+
+
+# treatment
+gene_box_treatment <- gene_fl |>
+  ggplot(aes(x = Treatment, y = gene_expression, fill = Treatment)) +
+  theme_classic()+
+  geom_boxplot() +
+  labs(x = "Treatment",
+       y = "Gene expression",
+       title = "Treatment boxplot"
+  ) +
+  harrypotter::scale_fill_hp("Ravenclaw", discrete = TRUE)
+gene_box_treatment
+
+# save
+ggsave(filename = here::here("figs/EDA_box_treatment.png"),
+       plot = gene_box_treatment,
+       width = 8, height = 6)
+
+# different cell lines
+gene_box_name <- gene_fl |>
+  ggplot(aes(x = factor(name, levels = c("GL-XIB", "GL-CDZ", "GL-RJS", "GL-XIK","GL-CWN", "GL-KYH","GL-ZHW", "GL-MFA")), y = gene_expression, fill = cell_line)) +
+  theme_classic()+
+  geom_boxplot() +
+  facet_wrap(~Treatment)+
+  labs(x = "Name (of different cell lines)",
+       y = "Gene expression",
+       title = "Cell line name boxplot"
+  ) +
+  harrypotter::scale_fill_hp("Ravenclaw", discrete = TRUE)
+gene_box_name
+
+# save
+ggsave(filename = here::here("figs/EDA_box_name.png"),
+       plot = gene_box_name,
+       width = 8, height = 6)
+
+
+```
+
+```{r}
+# Q-Q plot
+# treatment
+gene_qq_treatment <- gene_fl |>
+  ggplot(aes(sample = gene_expression, colour = Treatment)) +
+  geom_qq()+
+  geom_qq_line()+
+  labs(x="Normal theoretical quantiles",
+       y="Gene expression",
+       title = "Treatment Q-Q plot"
+  ) # the gene expression data is not normally distributed
+gene_qq_treatment
+
+# save
+ggsave(filename = here::here("figs/EDA_qq_treatment.png"),
+       plot = gene_qq_treatment,
+       width = 8, height = 6)
+```
+
+```{r}
+# points
+gene_points_conc <- gene_fl |>
+  ggplot(aes(x=conc, y = gene_expression, linetype = name,  color = Treatment)) +
+  geom_point()+
+  geom_line()+
+  labs(x="Concentration",
+       y="Gene expression",
+       title="Concentration vs Gene expression"
+  )
+gene_points_conc
+
+# save
+ggsave(filename = here::here("figs/EDA_point_conc.png"),
+       plot = gene_points_conc,
+       width = 8, height = 6)
+```
+

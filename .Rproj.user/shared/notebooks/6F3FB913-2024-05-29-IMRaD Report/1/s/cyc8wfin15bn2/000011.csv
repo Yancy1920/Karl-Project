@@ -1,0 +1,8 @@
+"0","gene_lmm_resamples |> collect_metrics()"
+"1","[1m[33mError[39m in `estimate_tune_results()`:[22m
+[33m![39m All models failed. Run `show_notes(.Last.tune.result)` for more information.
+Backtrace:
+[90m 1. [39m[1mtune[22m::collect_metrics(gene_lmm_resamples)
+[90m 2. [39mtune:::collect_metrics.tune_results(gene_lmm_resamples)
+[90m 3. [39m[1m[94mtune::estimate_tune_results([39m[22mx[1m[94m)[39m[22m
+"

@@ -1,0 +1,2 @@
+"0","# look at the whole dataset"
+"0","gene_tab <- skimr::skim_without_charts(gene_fl)"

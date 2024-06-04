@@ -1,0 +1,6 @@
+"skim_type","skim_variable","n_missing","complete_rate","character.min","character.max","character.empty","character.n_unique","character.whitespace","numeric.mean","numeric.sd","numeric.p0","numeric.p25","numeric.p50","numeric.p75","numeric.p100"
+"character","cell_line",0,1,9,13,0,2,0,NA,NA,NA,NA,NA,NA,NA
+"character","Treatment",0,1,7,20,0,2,0,NA,NA,NA,NA,NA,NA,NA
+"character","name",0,1,6,6,0,8,0,NA,NA,NA,NA,NA,NA,NA
+"numeric","conc",0,1,NA,NA,NA,NA,NA,5,3.18039974354414,0,2,5,8,10
+"numeric","gene_expression",0,1,NA,NA,NA,NA,NA,14.3126136363636,9.75598802201955,2.58,7.03,11.145,19.3975,44.44

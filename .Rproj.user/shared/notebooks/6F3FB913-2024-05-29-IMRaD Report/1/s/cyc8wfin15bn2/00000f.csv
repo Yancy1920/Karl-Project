@@ -1,0 +1,70 @@
+"0","# Cross validation"
+"0","# split dataset"
+"0","set.seed(2022)"
+"0","gene_split <- initial_split(gene_fl)"
+"0",""
+"0","gene_train <- training(gene_split)"
+"0","gene_test <- testing(gene_split)"
+"0",""
+"0","gene_CV <- vfold_cv(gene_train)"
+"0",""
+"0","# fit models"
+"0","# linear model"
+"0","gene_lm_eva <- "
+"0","  linear_reg() |> "
+"0","  set_engine(""lm"")"
+"0","gene_lm_workflow <- "
+"0","  workflow() |> "
+"0","  add_model(gene_lm_eva) |> "
+"0","  add_formula(gene_expression ~ Treatment * conc + cell_line + name)"
+"0",""
+"0","# linear mixed-effect model"
+"0","gene_lmm_eva <- "
+"0","  linear_reg() |> "
+"0","  set_engine(""lmer"")"
+"0",""
+"0","gene_lmm_workflow <- "
+"0","  workflow() |> "
+"0","  add_model(gene_lmm_eva) |> "
+"0","  add_formula(gene_expression ~ Treatment + conc + Treatment*conc + cell_line + (1|name))"
+"0",""
+"0","#"
+"0","gene_lm_resamples <- "
+"0","  fit_resamples("
+"0","    gene_lm_workflow, "
+"0","    resamples = gene_CV,"
+"0","    control <- control_resamples(save_pred = TRUE)"
+"0","  ) "
+"2","→ [33m[1mA[22m[39m | [33mwarning[39m: prediction from rank-deficient fit; consider predict(., rankdeficient=""NA"")
+"
+"2","There were issues with some computations   [1m[33mA[39m[22m: x1"
+"2","There were issues with some computations   [1m[33mA[39m[22m: x4"
+"2","There were issues with some computations   [1m[33mA[39m[22m: x6"
+"2","There were issues with some computations   [1m[33mA[39m[22m: x9"
+"2","There were issues with some computations   [1m[33mA[39m[22m: x10"
+"2","
+"
+"0","gene_lmm_resamples <- "
+"0","  fit_resamples("
+"0","    gene_lmm_workflow, "
+"0","    resamples = gene_CV,"
+"0","    control <- control_resamples(save_pred = TRUE)"
+"0","  ) "
+"2","→ [31m[1mA[22m[39m | [31merror[39m:   [38;5;254mInteraction terms involving factors or characters have been detected on the RHS of `formula`. These are not allowed
+               when `indicators = ""none""`.
+               [36mℹ[38;5;254m Interactions terms involving factors were detected for ""Treatment"" in `Treatment * conc`.[39m
+"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x1"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x2"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x3"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x4"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x5"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x6"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x7"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x8"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x9"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x10"
+"2","There were issues with some computations   [1m[31mA[39m[22m: x10"
+"2","
+"
+"0","gene_lm_resamples |> collect_metrics()"

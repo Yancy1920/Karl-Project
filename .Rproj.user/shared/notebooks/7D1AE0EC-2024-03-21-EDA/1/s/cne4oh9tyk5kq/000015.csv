@@ -1,0 +1,6 @@
+"0","# look at response variable (histogram)"
+"0","gene_exp_hist <- gene_fl |>"
+"0","  ggplot(aes(gene_expression)) +"
+"0","  geom_histogram(col = ""black"", fill = ""orange"") +"
+"0","  labs(title = ""Gene expression histogram"")  # It is unimodel right-skewed."
+"0","gene_exp_hist"

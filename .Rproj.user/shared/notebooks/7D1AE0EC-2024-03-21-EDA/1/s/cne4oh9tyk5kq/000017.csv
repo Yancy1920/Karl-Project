@@ -1,0 +1,4 @@
+"0","# save"
+"0","ggsave(filename = here::here(""figs/EDA_gene expression_hist.png""),"
+"0","       plot = gene_exp_hist,"
+"0","       width = 8, height = 6)"
