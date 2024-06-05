@@ -6,6 +6,11 @@ editor: visual
 output: bookdown::html_document2
 ---
 
+About README:
+
+This README.md can be viewed on GitHub. Additionally, this repository contains both `README.qmd` and `README.html` files. `README.qmd` is the source code used for editing the README and can be opened and edited in RStudio. `README.html` is an HTML format report file compiled from the source code and can be opened in RStudio as well as any web browser.
+
+
 # 1. Project information
 
 ## 1.1 Introduction to this project
@@ -84,132 +89,9 @@ Karl requested an EDA on this data set and a presentation be prepared to explain
 
 Karl requested to plot the following figure and save as an .tiff file (9in x 6in) with a resolution of 500, and use Time New Roman font.
 
-```{r,echo=FALSE}
-pacman::p_load(readxl, regclass, car, vip, tidymodels, lme4, showtext, gghighlight, ggpubr, patchwork, ggrepel, gglm, multilevelmod, knitr, cowplot)
-```
+![Gene figure](figs/genefig.png)
 
-```{r,echo=FALSE}
-# Load data
-gene_path = paste(here::here(), "/raw-data/2024-03-04-WIF-tis4d.xlsx", sep = "")
-gene_fl <- read_excel(gene_path, sheet = 1, na = "NA")
-```
-
-```{r,echo=FALSE}
-# Clean data
-# Standardize some column names and variable names
-gene_fl <-
-  gene_fl |>
-  mutate(
-    treatment = case_when(
-      treatment == "placebo" ~ "Placebo",
-      treatment == "activating factor 42" ~ "Activating factor 42",
-      TRUE ~ treatment
-    )
-  )
-gene_fl <-
-  gene_fl |>
-  mutate(
-    cell_line= case_when(
-      cell_line == "CELL-TYPE 101" ~ "Cell-type 101",
-      cell_line == "WILD-TYPE" ~ "Wild-type",
-      TRUE ~ cell_line
-    )
-  )
-
-gene_fl <-
-  gene_fl |>
-  mutate(
-    name = case_when(
-      name == "GL-cDZ" ~ "GL-CDZ",
-      name == "Gl-Cwn" ~ "GL-CWN",
-      name == "GL-cwN" ~ "GL-CWN",
-      name == "GL-kYH" ~ "GL-KYH",
-      name == "Gl-Rjs" ~ "GL-RJS",
-      name == "GL-rjS" ~ "GL-RJS",
-      name == "Gl-Xib" ~ "GL-XIB",
-      name == "GL-XIb" ~ "GL-XIB",
-      name == "GL-Xik" ~ "GL-XIK",
-      name == "Gl-Zhw" ~ "GL-ZHW",
-      name == "GL-ZHw" ~ "GL-ZHW",
-      TRUE ~ name
-    )
-  )
-
-colnames(gene_fl)[2] <- "Treatment"
-# delete NA terms
-gene_fl <- na.omit(gene_fl)
-```
-
-```{r,warning=FALSE,echo=FALSE,include=FALSE}
-
-## Add font
-font_add(family = "times",
-         regular = here::here("font/Times New Roman.ttf"))  # To add this font, you need to include file "Times New Roman.ttf" in the path here::here(), I've included this in this R project folder.
-
-set_geom_fonts <- function(family = NULL, ggrepel = FALSE) {
-  if (is.null(family)) {
-    family <- ggplot2::theme_get()$text$family
-  }
-  
-  update_geom_defaults("text", list(family = family))
-  update_geom_defaults("label", list(family = family))
-  
-  # Optional defaults for the ggrepel geoms
-  if (ggrepel) {
-    update_geom_defaults(ggrepel::GeomTextRepel, list(family = family))
-    update_geom_defaults(ggrepel::GeomLabelRepel, list(family = family))
-  }
-}
-
-showtext_auto() # Use this command to set font in following plots.
-
-# Sperate the dataset based on cell line type
-gene_fl_A <- gene_fl[which(gene_fl$cell_line == "Wild-type"), ]
-gene_fl_B <- gene_fl[which(gene_fl$cell_line == "Cell-type 101"), ]
-
-# set label for two plots
-label_data_A <- c(rep(NA, 20), "XIB", "CDZ", rep(NA, 20), "RJS", "XIK")
-label_data_B <- c(rep(NA, 20), "CWN", "KYH", rep(NA, 20), "ZHW", "MFA")
-
-# The first plot
-pA <- gene_fl_A |>
-  ggplot(aes(x = conc, y = gene_expression, fill = Treatment)) +
-  scale_fill_manual(values = c("#78A8D1", "#D5BF98")) +
-  geom_point(colour = "black", size = 3, shape = 21, stroke = 0.5) +
-  labs(x = expression(paste(mu, "g/ml")), y = "Gene Expression") +
-  ggtitle("Wild-type") +
-  geom_label_repel(label = label_data_A, nudge_x = 1, nudge_y = 0, size = 5, show.legend = FALSE) +
-  scale_x_continuous(limits = c(0, 11), breaks = seq(0, 10, 1)) +
-  theme_bw() +
-  scale_shape_manual() +
-  set_geom_fonts(family = "times", ggrepel = TRUE) +
-  theme(text = element_text(family = "times", size = 20))
-
-# The second plot
-pB <- gene_fl_B |>
-  ggplot(aes(x = conc, y = gene_expression, fill = Treatment)) +
-  scale_fill_manual(values = c("#78A8D1", "#D5BF98")) +
-  geom_point(colour = "black", size = 3, shape = 21, stroke = 0.5) +
-  labs(x = expression(paste(mu, "g/ml")), y = "Gene Expression") +
-  ggtitle("Cell-type 101") +
-  geom_label_repel(label = label_data_B, nudge_x = 1, nudge_y = 0, size = 5, show.legend = FALSE) +
-  scale_x_continuous(limits = c(0, 11), breaks = seq(0, 10, 1)) +
-  theme_bw() +
-  scale_shape_manual() +
-  set_geom_fonts(family = "times", ggrepel = TRUE) +
-  theme(text = element_text(family = "times", size = 20))
-
-# Place the two images side by side and label them.
-p <- pA+pB+
-  plot_annotation(tag_levels = "A")+
-  plot_layout(guides = "collect")&
-  theme(legend.position = 'bottom')
-```
-
-```{r,warning=FALSE,echo=FALSE,fig.cap="Gene expression vs. growth factor concentrations plot. The graphs are divided into two parts based on cell line type, labelled as A and B, and different colors are used to represent different treatments. The tags on the graph represent different cell line individuals."}
-#| label: fig-01
-p
-```
+This is a gene expression vs. growth factor concentrations plot. The plot is divided into two parts based on cell line type, labelled as A and B, and different colors are used to represent different treatments. The tags on the graph represent different cell line individuals.
 
 The complete code for this is located in the `R-code` folder, named `2024-04-01-Figure.Rmd`. The figure was saved in the `figs` folder, named `gene_fig.tiff`.
 
@@ -227,7 +109,9 @@ The final step of the current analysis is to fit a predictive model to the gene 
 
 As mentioned earlier, the purpose of this project is to explore the impact of different treatments on the promotion effect of growth factors on gene expression. Among the five variables, gene expression is the response variable, while the other four are independent variables, consisting of three categorical variables and one numerical variable.
 
-From the previous EDA, differences in gene expression across various levels of cell line type and treatment were observed. Generally, gene expression tends to increase with higher concentrations of growth factors. As depicted in Figure [@fig-01] in the [@sec-figure], even with identical treatment and growth factor concentrations, disparities in gene expression persist among different individuals of the same cell line type. Consequently, it can be considered to include the variable `name` as either an independent variable or a random effect (since in future predictions, we might encounter new cell line individuals, so fitting parameters only for the current eight cell line individuals would be unreasonable).
+From the previous EDA, differences in gene expression across various levels of cell line type and treatment were observed. Generally, gene expression tends to increase with higher concentrations of growth factors. As depicted in the gene figure shown below, even with identical treatment and growth factor concentrations, disparities in gene expression persist among different individuals of the same cell line type. Consequently, it can be considered to include the variable `name` as either an independent variable or a random effect (since in future predictions, we might encounter new cell line individuals, so fitting parameters only for the current eight cell line individuals would be unreasonable).
+
+![Gene figure](figs/genefig.png)
 
 Therefore, two models were considered: a linear model and a linear mixed-effects model. In the linear model, `name` is treated as a regular categorical variable. In the mixed-effects model, `name` is treated as a random effect. Additionally, since the study aims to investigate the effect of treatment on the relationship between growth factor and gene expression, we also tested the necessity of adding the interaction term between `Treatment` and `conc` in both the linear model and the linear mixed-effects model. The results indicate that adding this interaction term is crucial for both models. So the following two models were compared:
 
