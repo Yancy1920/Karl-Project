@@ -85,7 +85,7 @@ The data set `2024-03-04-WIF-tis4d.xlsx` is stored in the folder `raw-data`. It 
 
 Karl requested an EDA on this data set and a presentation be prepared to explain the results to his boss. The complete code for performing EDA on the data is located in the `R-code` folder, named `2024-03-21-EDA.Rmd`. The slides are located in the `slide` folder, named `2024-03-21-EDA.pptx`.
 
-## 2.3 Reproducing an EDA figure (2024-04-01) {#sec-figure}
+## 2.3 Reproducing an EDA figure (2024-04-01)
 
 Karl requested to plot the following figure and save as an .tiff file (9in x 6in) with a resolution of 500, and use Time New Roman font.
 
