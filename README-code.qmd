@@ -1,9 +1,8 @@
 ---
-title: "README-code"
+title: "readme-code"
 author: "Yingxin Xu"
 format: html
 editor: visual
-output: bookdown::html_document2
 ---
 
 # 1. Project information
