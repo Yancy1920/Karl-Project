@@ -8,7 +8,7 @@ output: bookdown::html_document2
 
 About README:
 
-This README.md can be viewed on GitHub. Additionally, this repository contains both `README.qmd` and `README.html` files. `README.qmd` is the source code used for editing the README and can be opened and edited in RStudio. `README.html` is an HTML format report file compiled from the source code and can be opened in RStudio as well as any web browser.
+This README.md can be viewed on GitHub. Additionally, this repository contains both `README-code.qmd` and `README-code.html` files. `README-code.qmd` is the source code used for editing the README and can be opened and edited in RStudio. `README-code.html` is an HTML format report file compiled from the source code and can be opened in RStudio as well as any web browser.
 
 
 # 1. Project information
