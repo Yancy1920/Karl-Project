@@ -1,5 +1,5 @@
 ---
-title: "README"
+title: "README-code"
 author: "Yingxin Xu"
 format: html
 editor: visual
@@ -206,7 +206,7 @@ p <- pA+pB+
   theme(legend.position = 'bottom')
 ```
 
-```{r,warning=FALSE,echo=FALSE,fig.cap="Gene expression vs. growth factor concentrations plot. The graphs are divided into two parts based on cell line type, labelled as A and B, and different colors are used to represent different treatments. The tags on the graph represent different cell line individuals."}
+```{r,warning=FALSE,echo=FALSE,fig.cap="Gene expression vs. growth factor concentrations plot. This plot is divided into two parts based on cell line type, labelled as A and B, and different colors are used to represent different treatments. The tags on the graph represent different cell line individuals."}
 #| label: fig-01
 p
 ```
